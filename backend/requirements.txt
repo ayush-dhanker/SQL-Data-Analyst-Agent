@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+langgraph
+langchain
+langchain-community
+langchain-groq
+psycopg2-binary
+python-dotenv
+langsmith
+pandas
