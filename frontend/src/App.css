@@ -1,0 +1,195 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #0f0f0f;
+  color: #e5e5e5;
+  height: 100vh;
+}
+
+.app {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 24px 16px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.header {
+  margin-bottom: 24px;
+}
+
+.header h1 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.header p {
+  font-size: 0.85rem;
+  color: #666;
+  margin-top: 4px;
+}
+
+/* Chat container */
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 16px;
+  overflow: hidden;
+}
+
+/* Messages */
+.messages {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-right: 4px;
+}
+
+.empty-state {
+  text-align: center;
+  color: #444;
+  margin-top: 80px;
+  font-size: 1rem;
+}
+
+/* Message bubbles */
+.message {
+  max-width: 100%;
+}
+
+.message.user p {
+  background: #1e1e2e;
+  border: 1px solid #2e2e4e;
+  color: #a5b4fc;
+  padding: 12px 16px;
+  border-radius: 12px;
+  display: inline-block;
+  max-width: 70%;
+  float: right;
+  clear: both;
+}
+
+.message.agent {
+  clear: both;
+}
+
+.agent-response {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.answer {
+  color: #e5e5e5;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.loading {
+  color: #555;
+  font-style: italic;
+}
+
+/* Chart */
+.chart-container {
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+/* Table */
+.table-container {
+  overflow-x: auto;
+  border-radius: 12px;
+  border: 1px solid #2a2a2a;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+th {
+  background: #1a1a1a;
+  padding: 10px 14px;
+  text-align: left;
+  color: #888;
+  font-weight: 600;
+  text-transform: capitalize;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+td {
+  padding: 10px 14px;
+  border-bottom: 1px solid #1a1a1a;
+  color: #e5e5e5;
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+tr:hover td {
+  background: #1a1a1a;
+}
+
+/* SQL details */
+.sql-details {
+  margin-top: 4px;
+}
+
+.sql-details summary {
+  font-size: 0.8rem;
+  color: #555;
+  cursor: pointer;
+  user-select: none;
+}
+
+.sql-details summary:hover {
+  color: #888;
+}
+
+.sql-details pre {
+  margin-top: 8px;
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 0.8rem;
+  color: #6366f1;
+  overflow-x: auto;
+  white-space: pre-wrap;
+}
+
+/* Input row */
+.input-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+}
+
+textarea {
+  flex: 1;
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  padding: 12px 16px;
+  color: #e5e5e5;
+  font-size: 0.95rem;
+  resize: none;
+  outline: none;
+  font-family: inherit;
+}
