@@ -1,8 +1,8 @@
 # SQL Analyst Agent
 
-A natural language interface to a PostgreSQL database, powered by
-LangGraph, Groq, and FastAPI. Ask questions in plain English and
-get structured answers, auto-generated charts, and full SQL transparency.
+Ever wished you could just *ask* your database a question instead of writing SQL? That's what this is.
+
+Type a question in plain English — "which products made the most money last quarter?" — and the agent figures out the SQL, runs it, and hands you back a clean answer with a chart. No SQL knowledge required.
 
 ![Stack](https://img.shields.io/badge/LangGraph-agent-blue)
 ![Stack](https://img.shields.io/badge/FastAPI-backend-green)
@@ -11,44 +11,54 @@ get structured answers, auto-generated charts, and full SQL transparency.
 
 ---
 
-## Demo
+## What it can do
 
-**Top 5 products by revenue**
+Ask it anything about the Northwind trading database and it figures out the rest:
+
+**"What are the top 5 products by total revenue?"**
 > Côte de Blaye — $141,396.74 | Thüringer Rostbratwurst — $80,368.67
 > Raclette Courdavault — $71,155.70 | Tarte au sucre — $47,234.97
 > Camembert Pierrot — $46,825.48
 
-**Country with most customers**
+**"Which country has the most customers?"**
 > USA with 13 customers
 
-**Monthly revenue for 1997**
-> Ranges from $36,362.80 (June) to $71,398.43 (December)
+**"Show me monthly revenue for 1997"**
+> Ranges from $36,362.80 in June to $71,398.43 in December
+
+Results come with auto-generated charts and a collapsible SQL viewer so you can see exactly what ran under the hood.
 
 ---
 
-## How It Works
+## How it works
+
+The agent isn't just prompting an LLM and hoping for the best. It runs a proper pipeline:
 
 ```
-User Question
+Your question
       │
       ▼
-schema_context_node   → fetches table/column structure from PostgreSQL
+Fetch schema        → pulls table/column structure from PostgreSQL
+                      so the LLM knows what it's working with
       │
       ▼
-sql_generate_node     → LLM writes SQL using schema as context
+Generate SQL        → LLM writes a query grounded in the real schema
       │
       ▼
-sql_execute_node      → runs SQL against PostgreSQL
-      │                 on failure → retries with error feedback (max 3x)
-      ▼
-format_answer_node    → LLM formats raw results into natural language
+Execute SQL         → runs it against PostgreSQL
+                      if it fails → feeds the error back and retries (up to 3x)
       │
       ▼
-chart_node            → detects if result is chartable (bar / line)
+Format answer       → LLM turns raw rows into a readable response
       │
       ▼
-Response (answer + chart + SQL)
+Detect chart        → checks if the data is worth visualizing (bar or line)
+      │
+      ▼
+Response            → answer + chart + SQL
 ```
+
+The schema fetch is the key step — without it, the LLM would guess column names and get them wrong. With it, every query is grounded in reality.
 
 ---
 
@@ -67,11 +77,11 @@ Response (answer + chart + SQL)
 
 ## Features
 
-- Natural language → SQL translation with schema grounding
-- Auto-retry on SQL errors (up to 3 attempts with error feedback)
-- Bar and line chart auto-detection based on result shape
-- Collapsible SQL viewer for full transparency
-- Full LangSmith tracing for every agent run
+- Plain English → SQL with full schema grounding
+- Self-healing queries — retries with error feedback on failure
+- Auto chart detection — bar for categories, line for trends
+- SQL viewer — every answer shows the query that produced it
+- Full LangSmith tracing — every node, every run, fully observable
 
 ---
 
@@ -102,7 +112,7 @@ sql-analyst-agent/
 
 ---
 
-## Setup
+## Running it locally
 
 ### Prerequisites
 - Python 3.11+
@@ -150,32 +160,26 @@ npm install
 npm run dev
 ```
 
-Open **http://localhost:5173**
+Open **http://localhost:5173** and start asking questions.
 
 ---
 
 ## Observability
 
-Every agent run is traced in LangSmith. Each node appears with
-timing, inputs, and outputs — making it easy to catch silent
-failures like wrong SQL that runs without errors.
+Every agent run is fully traced in LangSmith — each node shows timing, inputs, and outputs. This makes it possible to catch failures that would otherwise be invisible: SQL that runs without errors but returns wrong answers.
 
-See [postmortem.md](./postmortem.md) for a documented example of
-a silent semantic failure caught using LangSmith traces.
+This project includes a real example of exactly that. See [postmortem.md](./postmortem.md) — a documented silent semantic failure where the agent answered confidently but got it wrong, and why.
 
 ---
 
-## Known Limitations
+## Honest limitations
 
-- Ambiguous superlatives ("best", "worst", "top performing") are
-  resolved by the LLM without clarification — see postmortem
-- Schema is fetched on every request — can be cached for performance
-- Chart type is heuristic-based (≤10 rows = bar, >10 = line)
+- Ambiguous questions ("who's the best employee?") get answered without clarification — the LLM picks the most likely interpretation silently. See the postmortem for why this matters.
+- Schema is fetched on every request — fine for a demo, worth caching in production
+- Chart type is a simple heuristic: ≤10 rows → bar, >10 rows → line
 
 ---
 
-## Part of
+## Context
 
-Built as Project 3 of the
-[CampusX Agentic AI using LangGraph](https://github.com/campusx)
-curriculum — Week 4: Database integration, observability & tools.
+Built as Project 3 on Week 4: database integration, observability & tools.
