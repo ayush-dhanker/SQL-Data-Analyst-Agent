@@ -3,7 +3,7 @@ import axios from "axios";
 import ResultTable from "./ResultTable";
 import Chart from "./Chart";
 
-const API_URL = "http://localhost:8000";
+const API_URL = "https://sql-data-analyst-agent.onrender.com";
 
 export default function ChatBox() {
   const [question, setQuestion] = useState("");
